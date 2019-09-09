@@ -13,5 +13,5 @@ frontends
 apps
 appdbs
 
-[internal:vars]
-GUID="{{ lookup('env', 'GUID') }}"
+#[internal:vars]
+#GUID="{{ lookup('env', 'GUID') }}"
