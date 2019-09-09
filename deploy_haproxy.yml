@@ -15,12 +15,12 @@
   - name: enable HAProxy
     service:
       name: haproxy
-      state: started
+      notify: restart_haproxy
   - name: configure haproxy
     template:
       src: ./haproxy.cfg.j2
       dest: /etc/haproxy/haproxy.cfg
-  - name: restart HAproxy
+handlers: restart_haproxy
     service:
       name: haproxy
       state: restarted
