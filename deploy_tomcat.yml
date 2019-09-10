@@ -1,27 +1,27 @@
 ---
-- name: deploy tomcat
+- name: Deploy Tomcat
   hosts: apps
   gather_facts: false
   become: true
 
   tasks:
-  - name: install tomcat
+  - name: Install Tomcat
     package:
       name: tomcat
       state: latest
-  - name: enable tomcat at boot
+  - name: Enable tomcat at boot
     service:
       name: tomcat
       enabled: yes
 
-  - name: create ansible tomcat directory
+  - name: Create ansible tomcat directory
     file:
       path: /usr/share/tomcat/webapps/ROOT
       state: directory
 
-  - name: copy static index.html to tomcat webapps/ansible/index.html
+  - name: Copy html content 
     template:
-      src: index.html.j2
+      src: templates/index.html.j2
       dest: /usr/share/tomcat/webapps/ROOT/index.html
       mode: 0644
 

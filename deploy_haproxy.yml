@@ -1,26 +1,31 @@
 ---
-- name: deploy haproxy
+- name: Deploy HAProxy
   hosts: frontends
+  vars:
+    ha_backend_servers: "{{ groups['apps'] }}"
   gather_facts: false # remove later! speeds up testing
   become: true
 
   tasks:
-  - name: http
-    package:
+   - name: Include vars
+     include_vars:
+      file: 'group_vars/apps'
+   - name: Install httpie
+     package:
       name: httpie
       state: latest
-  - name: install HAProxy
-    yum:
-      name=haproxy state=latest
-  - name: enable HAProxy
-    service:
-      name: haproxy
-      notify: restart_haproxy
-  - name: configure haproxy
-    template:
-      src: ./haproxy.cfg.j2
+   - name: Install HAProxy
+     yum:
+      name: haproxy 
+      state: latest
+   - name: Configure HAProxy
+     template:
+      src: ./templates/haproxy.cfg.j2
       dest: /etc/haproxy/haproxy.cfg
-handlers: restart_haproxy
-    service:
+     notify: 
+      - restart_haproxy
+  handlers: 
+   - name: restart_haproxy
+     service:
       name: haproxy
-      state: restarted
+      state: restarted 
